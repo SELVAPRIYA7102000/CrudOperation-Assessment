@@ -1,0 +1,267 @@
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+@{
+    Layout = "_Layout";
+}
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@model SampleCore.Core.Model.Student
+        <style>
+   
+
+            body {
+                    background-color:white;
+                    margin: 0px 341px 50px 341px;
+                    padding: 0px 0px 25px 0px;
+                    border: 4px solid black;
+                    border-radius: 25px;
+                    padding-left: 50px;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    background-attachment:initial;
+              
+                    }
+    
+            .error{
+                color:red;
+            }
+     
+            #phoneno{
+              border:hidden;
+              
+            }
+
+           
+            .hide{
+                display:none;
+            }
+           
+            #password-field{
+                border:hidden;
+              
+            }
+            .required {
+          color: red;
+            }
+        </style>
+
+
+
+@using (Html.BeginForm("Index", "Home",FormMethod.Post, new { id = "signupForm"}))
+{
+
+    <div id = "clearForm">
+       
+        @Html.HiddenFor(model=>model.StudentID)
+        <div>
+      <h4> <span class="required">*</span>Firstname </h4>
+       
+        <i class="fa fa-user" aria-hidden="true" style="font-size:24px"></i>
+        @Html.TextBoxFor(model=>model.FirstName,new{placeholder="First name",maxlength="15", pattern="[a-zA-Z]{1,15}"})
+        <hr style="width:102%;text-align:left;margin-left:0">
+        </div>
+       <div>
+         <h4> <span class="required">*</span>Lastname </h4>
+        <i class="fa fa-user" aria-hidden="true" style="font-size:24px"></i>
+        @Html.TextBoxFor(model=>model.LastName,new{placeholder="Last name",maxlength="15", pattern="[a-zA-Z]{1,15}"})
+        <hr style="width:102%;text-align:left;margin-left:0">
+       </div>
+
+        <div id="dpt">
+         <h4> <span class="required">*</span>Department</h4>
+        <i class="fa fa-users" aria-hidden="true" style="font-size:18px"></i>
+        @Html.DropDownList("department", new List<SelectListItem>
+            {
+            new SelectListItem{ Text="cse"},
+            new SelectListItem{ Text="IT"},
+            new SelectListItem{ Text="eee"},
+            new SelectListItem{Text="ece"},
+            new SelectListItem{Text="Mech"},
+            new SelectListItem{Text="Civil"},
+            }, "----Select Role----")
+       <hr style="width:102%;text-align:left;margin-left:0">
+       </div>
+        <h4> <span class="required">*</span>Class </h4>
+        <i class="fa fa-user" aria-hidden="true" style="font-size:24px"></i>
+        @Html.TextBoxFor(model=>model.Class,new{placeholder="class",maxlength="3"})
+        <hr style="width:102%;text-align:left;margin-left:0">
+
+      
+        <h4>Year</h4>
+        <i class="fa fa-calendar"  aria-hidden="true" style="font-size:24px"></i>
+        @Html.TextBoxFor(m => m.joining, new {placeholder="year of joining", type="date",max="2025-12-31"})
+        <hr style="width:102%;text-align:left;margin-left:0">
+
+
+         <h4> <span class="required">*</span>Age </h4>
+         <i class="fa fa-child" aria-hidden="true" style="font-size:24px"></i>
+         @Html.TextBoxFor(model=>model.age,new{placeholder="Age",maxlength="2"})
+         <hr style="width:102%;text-align:left;margin-left:0">
+
+         <h4>Location</h4>
+         <i class="fa fa-map-marker" aria-hidden="true" style="font-size:24px"></i>
+         @Html.TextBoxFor(model=>model.Location,new{placeholder="location",maxlength="10"})
+         <hr style="width:102%;text-align:left;margin-left:0">
+        
+
+         <h4>   Gender </h4>
+         <i class="fa fa-venus-double" aria-hidden="true"  style="font-size:24px"></i>&nbsp;&nbsp;
+        
+         @Html.RadioButtonFor(m => m.Gender,"Male")Male  &nbsp;&nbsp;
+
+        @Html.RadioButtonFor(m => m.Gender,"Female")Female   &nbsp;&nbsp;
+
+        @Html.RadioButtonFor(m => m.Gender,"Others")Others
+        
+          <hr style="width:102%;text-align:left;margin-left:0">
+
+        <h4>Phone</h4>
+         <i class="fa fa-phone" style="font-size:24px"></i>
+        @Html.TextBoxFor(model=>model.Mobile,new{id="phoneno",placeholder="Phone",minlength="10",maxlength="10",type="tel"})
+
+          <hr style="width:102%;text-align:left;margin-left:0">
+        
+        
+        <button id="BtnSubmit" type="submit" onclick="SubmitDetails()" style="background-color:mediumpurple;height:30px;" >Submit</button>
+
+       <button id="Btnedit" type="submit" class="hide" style="background-color:mediumpurple;height:30px;" >Update</button>
+
+        <button id="Btnclr" type="button" class="hide"  onclick="ClearDetails()"style="background-color:mediumpurple;height:30px;" >Clear</button>
+
+
+       <a href="https://localhost:7218/Home/Read">
+            <button type="button" style="height:contain;background-color: #4CAF50;"> Go Next</button>
+        </a>
+    </div>
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+       
+       
+        $("#signupForm").validate({
+
+            rules: {
+                FirstName: {
+                    required: true,
+            },
+                
+                 LastName: {
+                    required: true,                  
+                  
+                },
+               
+                 Mobile: {
+                    
+                     required: true,
+                     number: true,
+                     maxlength: 10
+                       },
+                 
+                 department: {
+                     required: true
+                },
+                joining: {
+                     required: true
+                },
+                age: {
+                     required: true,
+                     number:true,
+                     minlength: 2
+
+                },
+                Gender: {
+                     required: true
+                },
+                //Location:{
+                //     required: true,
+                //     lettersonly: true
+                //},
+                Class: {
+                     required: true,
+                      lettersonly: true
+                }
+
+            },
+
+            messages: {
+               FirstName: {
+                    required: " Enter a Firstname"
+                    
+                },
+  
+                LastName: {
+                    required: " Enter a Lastname"
+                 
+                },
+                 age: {
+                     required: " Enter your age",
+                     minlength: " Your age must consist of at least 2 characters",
+                     number: "only numbers are valid"
+                 },
+               
+                joining: {
+                      required: "Choose the year"
+                },
+                Class: {
+                     required: " Enter your Class", 
+                      lettersonly: "Only alphabets are valid"
+
+                },
+                //Location: {
+                //    required: " Enter your Location",
+                //    lettersonly: "Only alphabets are valid"
+                //},
+                Mobile: {
+                      number: "Enter valid Number",
+                     required: " Enter a Phone Number",
+                     minlength: " Your PhoneNo must consist of at least 10 characters"
+                 },
+                 
+                department: {
+                     required: " Choose your Department"
+                }
+
+            }
+        });
+    });
+
+   function SubmitDetails() {
+        if ($("#signupForm").validate()) {
+            $("#signupForm").submit();
+        }
+    }
+</script>
+
+
+<script>
+   
+
+   //Hide and show button
+    var edit = @Html.Raw(ViewBag.edit)
+    if (edit == 1) {
+         $("#BtnSubmit").hide();
+     $("#Btnedit").show();
+      $("#Btnclr").show();
+    }
+
+   //clear
+     function ClearDetails()
+     {
+   $("#signupForm").closest('form').find("input,input[type=radio],select").val("");
+   $('input[name=Gender]').attr('checked',false);
+
+ } 
+
+
+</script>
+
+ 
+
+ 
+
+   
